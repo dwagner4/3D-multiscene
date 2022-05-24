@@ -1,5 +1,6 @@
 /* eslint-disable new-cap */
 // eslint-disable-next-line import/no-unresolved
+import { gsap } from 'gsap';
 
 /** import the Finite State Machine */
 import { mainService } from './mainMachine.js';
@@ -36,12 +37,7 @@ const homebtn = document.querySelector('#homebtn');
 const menubtn = document.querySelector('#menubtn');
 const aboutbtn = document.querySelector('#aboutbtn');
 
-homebtn.onclick = () => {
-  mainService.send({ type: 'HOME' });
-};
-menubtn.onclick = () => {
-  mainService.send({ type: 'ONE' });
-};
+const fadeDuration = 1;
 
 /**
  * create Global stage
@@ -52,6 +48,21 @@ const stage = new Act1(container, {
   debug: false,
 });
 stage.init();
+
+homebtn.onclick = () => {
+  gsap.to(stage.overlayMaterial.uniforms.uAlpha, {
+    duration: fadeDuration,
+    value: 1,
+    onComplete: () => mainService.send({ type: 'HOME' }),
+  });
+};
+menubtn.onclick = () => {
+  gsap.to(stage.overlayMaterial.uniforms.uAlpha, {
+    duration: fadeDuration,
+    value: 1,
+    onComplete: () => mainService.send({ type: 'ONE' }),
+  });
+};
 
 /**
  * just load the world
@@ -65,6 +76,8 @@ stage.start();
  */
 // eslint-disable-next-line no-unused-vars
 const killWorld = () => {
+  // gsap.to(this.overlayMaterial.uniforms.uAlpha, {duration: 3, value: 1})
+
   stage.stop();
   stage.world.dispose();
   stage.update();
@@ -125,6 +138,10 @@ mainService.subscribe(state => {
         stage.world = new module.default(stage);
         stage.world.init();
         stage.start();
+        gsap.to(stage.overlayMaterial.uniforms.uAlpha, {
+          duration: fadeDuration,
+          value: 0,
+        });
       });
     }
     if (stateStr === 'one') {
@@ -135,6 +152,10 @@ mainService.subscribe(state => {
         stage.world = new module.default(stage);
         stage.world.init();
         stage.start();
+        gsap.to(stage.overlayMaterial.uniforms.uAlpha, {
+          duration: fadeDuration,
+          value: 0,
+        });
       });
     }
 
