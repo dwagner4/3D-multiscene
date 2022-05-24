@@ -5,12 +5,12 @@ import HeartScenery from '../scenery/HeartScenery.js';
 import Heart from '../actors/Heart.js';
 import MySphere from '../props/MySphere.js';
 
-export default class InitialWorld extends World {
+export default class OneWorld extends World {
   constructor(stage) {
     super(stage);
 
     this.stage.camera.position.set(0, 1.6, 5);
-    this.stage.scene.background = new THREE.Color(0x003049);
+    this.stage.scene.background = new THREE.Color(0x493000);
 
     const hrtBgrd = new HeartScenery();
     this.hemi = hrtBgrd.hemilight;

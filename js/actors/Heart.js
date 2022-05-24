@@ -27,16 +27,22 @@ export default class Heart extends Actor {
       bevelThickness: 1,
     };
 
-    const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+    this.geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+    this.geometry.name = 'dean';
+    this.material = new THREE.MeshPhongMaterial({ color: 0x88ddff });
+    this.material.name = 'dean';
 
-    this.model = new THREE.Mesh(
-      geometry,
-      new THREE.MeshPhongMaterial({ color: 0x88ddff })
-    );
+    this.model = new THREE.Mesh(this.geometry, this.material);
     this.model.scale.set(0.01, 0.01, 0.01);
     this.model.rotateZ(Math.PI * 1);
     this.model.castShadow = true;
+    this.model.name = 'dean';
 
     super.init();
+  }
+
+  dispose() {
+    this.geometry.dispose();
+    this.material.dispose();
   }
 }

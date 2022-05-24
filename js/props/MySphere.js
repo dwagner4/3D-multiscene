@@ -5,11 +5,17 @@ export default class MySphere extends Prop {
   constructor() {
     super();
     console.log(this);
+    this.model = {};
   }
 
   async init() {
-    const geometry = new THREE.SphereGeometry(0.25, 32, 16);
-    const material = new THREE.MeshPhongMaterial({ color: 0x222288 });
-    this.model = new THREE.Mesh(geometry, material);
+    this.geometry = new THREE.SphereGeometry(0.25, 32, 16);
+    this.material = new THREE.MeshPhongMaterial({ color: 0x222288 });
+    this.model = new THREE.Mesh(this.geometry, this.material);
+  }
+
+  dispose() {
+    this.geometry.dispose();
+    this.material.dispose();
   }
 }

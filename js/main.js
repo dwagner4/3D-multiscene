@@ -1,8 +1,11 @@
+/* eslint-disable new-cap */
 // eslint-disable-next-line import/no-unresolved
+
+/** import the Finite State Machine */
+import { mainService } from './mainMachine.js';
 
 /** import the stage and the initial world */
 import Act1 from './stages/Act1.js';
-import InitialWorld from './worlds/InitialWorld.js';
 
 /**
  * connect to backend
@@ -21,12 +24,6 @@ import InitialWorld from './worlds/InitialWorld.js';
  */
 
 /**
- * import the Finite State Machine
- *
- * import { mainService } from './mainMachine.js'
- */
-
-/**
  * identify html elements and attach listeners
  *
  * const homebtn = document.querySelector('#homebtn')
@@ -35,6 +32,16 @@ import InitialWorld from './worlds/InitialWorld.js';
  * homebtn.onmouseover = homeover
  * homebtn.onmouseout = msgout
  */
+const homebtn = document.querySelector('#homebtn');
+const menubtn = document.querySelector('#menubtn');
+const aboutbtn = document.querySelector('#aboutbtn');
+
+homebtn.onclick = () => {
+  mainService.send({ type: 'HOME' });
+};
+menubtn.onclick = () => {
+  mainService.send({ type: 'ONE' });
+};
 
 /**
  * create Global stage
@@ -49,8 +56,8 @@ stage.init();
 /**
  * just load the world
  */
-stage.world = new InitialWorld(stage);
-stage.world.init();
+// stage.world = new InitialWorld(stage);
+// stage.world.init();
 stage.start();
 
 /**
@@ -98,20 +105,39 @@ const parseState = stateValue => {
  * subscribe to ui state
  * lazy load world objects and initialize
  * change html element state
- * 
- * mainService.subscribe((state) => {
- *   homebtn.style.display = state.context.homebtn
- *   ...
- *   const stateStr = parseState(state.value)
- *   if ( stateStr === 'threefirst' ) {
-      if (stage.world) { killWorld() }
-      import('./worlds/ThreeWorld.js')
-        .then((module) => 
-        {
-          stage.world = new module.default()
-          stage.world.init()
-          stage.start()
-        })
-    }
-    currentStateStr = stateStr
+ *
  */
+let currentStateStr = null;
+
+mainService.subscribe(state => {
+  homebtn.style.display = state.context.homebtn;
+  menubtn.style.display = state.context.nextbtn;
+  aboutbtn.style.display = state.context.aboutbtn;
+
+  // changing world, don't want to restart world if not changed
+  const stateStr = parseState(state.value);
+  if (stateStr !== currentStateStr) {
+    if (stateStr === 'home') {
+      if (stage.world) {
+        killWorld();
+      }
+      import('./worlds/InitialWorld.js').then(module => {
+        stage.world = new module.default(stage);
+        stage.world.init();
+        stage.start();
+      });
+    }
+    if (stateStr === 'one') {
+      if (stage.world) {
+        killWorld();
+      }
+      import('./worlds/OneWorld.js').then(module => {
+        stage.world = new module.default(stage);
+        stage.world.init();
+        stage.start();
+      });
+    }
+
+    currentStateStr = stateStr;
+  }
+});
