@@ -13,11 +13,17 @@ The "System" directory contains three.js modules that are meant to be extended f
 
 
 Index.html contains minimal html and possible grphics to display during the initial download.
+
 main.js sets up html dynamic elements, subcribes to the finite state machine and loads the Stage instance
+
 actors and scenery all have init, update and dispose functions
+
 Large files and resources are loaded during each object's init() function which is async called recursively from the world's init()
+
 World instances contain an array of objectToBeUpdated[] which recursively calls update functions during render
+
 dispose functions are called when switching worlds
+
 
 
 ## Scripts
