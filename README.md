@@ -24,7 +24,11 @@ World instances contain an array of objectToBeUpdated[] which recursively calls 
 
 dispose functions are called when switching worlds
 
+## Quick Start
 
+1. Clone the repository 
+2. from root `npm install`
+3. `npm run start`
 
 ## Scripts
 
